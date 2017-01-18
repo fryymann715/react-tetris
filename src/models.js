@@ -60,6 +60,14 @@ export class Piece {
     this.rotation = Piece.rotations()[( Piece.rotations().indexOf( this.rotation ) +1) % 4 ]
   }
 
+  left() {
+    this.offset = new Point(this.offset.row, this.offset.col -1)
+  }
+
+  right() {
+    this.offset = new Point(this.offset.row, this.offset.col +1)
+  }
+
   unRotate() {
     this.rotation = Piece.roations()[( Piece.rotations().indexOf( this.rotation ) -1) % 4]
   }
@@ -106,6 +114,17 @@ export class Game {
     this.fallingPiece.rotate()
     return this
   }
+
+  left() {
+    this.fallingPiece.left()
+    return this
+  }
+
+  right() {
+    this.fallingPiece.right()
+    return this
+  }
+
 
 }
 
