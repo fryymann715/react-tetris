@@ -15,7 +15,9 @@ const reducer = ( state = new Model.Game(), action ) => {
   switch (action.type) {
     case 'TICK':
       const revedState = state.tick()
-      setTimeout( () => store.dispatch({ type: 'TICK' }), 500 )
+      if ( !revedState.isGameOver() ) {
+        setTimeout( () => store.dispatch({ type: 'TICK' }), 300 )
+      }
       return revedState
     case 'ROTATE':
       return state.rotate()

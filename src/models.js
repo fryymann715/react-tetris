@@ -1,3 +1,5 @@
+import * as _ from 'underscore'
+
 
 export class Point {
   constructor( row, col ) {
@@ -26,6 +28,7 @@ export class Shape {
   constructor( name, rotator ) {
     this.name = name
     this.rotator = rotator
+    this.classString = `square ${name}`
   }
   pointsRotated( rotation ) {
     return this.rotator( rotation )
@@ -38,6 +41,7 @@ export class Piece {
     this.shape = shape
     this.offset = offset
     this.rotation = 'N'
+    this.classString = shape.classString
   }
 
   points() {
@@ -100,7 +104,7 @@ export class Game {
 
   tick() {
     this.transactionDo( ()=> this.fallingPiece.fallOne(), ()=> this.fallingPiece.liftOne() )
-    if ( this.fallingPiece.maxRow() == this.rows ) {
+    if ( this.fallingPiece.maxRow() === this.rows ) {
       this.convertToRubble()
       return this
     }
@@ -114,7 +118,25 @@ export class Game {
 
   convertToRubble() {
     this.rubble = this.rubble.concat( this.fallingPiece.points() )
-    this.startAPiece()
+    this.completedRows().forEach( rubble => this.collapseRow( rubble ) )
+    if ( !this.isGameOver() ) {
+      this.startAPiece()
+    }
+  }
+
+  completedRows() {
+    return _.range(1, this.rows +1).filter(row =>
+      _.range(1, this.cols +1).every( col => this.rubbleHas( row, col ) )
+    )
+  }
+
+  collapseRow(row) {
+    this.rubble = this.rubble.filter(point => point.row !== row)
+    this.rubble.filter( point => point.row < row ).forEach( point => point.row += 1)
+  }
+
+  rubbleHas(row, col) {
+    return this.rubble.some( point => point.row === row && point.col === col)
   }
 
   startAPiece() {
@@ -160,6 +182,10 @@ export class Game {
 
   fallingPieceOverlapsRubble() {
     return this.fallingPiece.points().some( p => this.rubble.some( r => r.sameAs(p) ) )
+  }
+
+  isGameOver() {
+    return this.rubble.some( point => point.row === 1 )
   }
 }
 
