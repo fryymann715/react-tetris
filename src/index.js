@@ -7,6 +7,7 @@ import { createStore } from 'redux'
 import './index.css';
 
 Mousetrap.bind('space', () => store.dispatch({type: 'ROTATE'}))
+Mousetrap.bind('up', () => store.dispatch({type: 'ROTATE'}))
 Mousetrap.bind('left', () => store.dispatch({type: 'LEFT'}))
 Mousetrap.bind('right', () => store.dispatch({type: 'RIGHT'}))
 
@@ -14,7 +15,7 @@ const reducer = ( state = new Model.Game(), action ) => {
   switch (action.type) {
     case 'TICK':
       const revedState = state.tick()
-      // setTimeout( () => store.dispatch({ type: 'TICK' }), 500 )
+      setTimeout( () => store.dispatch({ type: 'TICK' }), 500 )
       return revedState
     case 'ROTATE':
       return state.rotate()
@@ -38,4 +39,4 @@ store.subscribe( () => {
 
 // store.dispatch({ type: 'TICK' })
 
-setInterval( () => store.dispatch({ type: 'TICK' }), 1000)
+setTimeout( () => store.dispatch({ type: 'TICK' }), 500)

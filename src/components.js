@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-let count = 0
+
 
 export class GameView extends React.Component {
   render() {
@@ -21,6 +21,7 @@ export class GameView extends React.Component {
 
 export class PieceView extends React.Component {
   render() {
+    let count = 0
     return (
       <div>
         { this.props.piece.points().map( square =>

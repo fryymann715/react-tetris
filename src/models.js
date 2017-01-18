@@ -60,6 +60,10 @@ export class Piece {
     this.rotation = Piece.rotations()[( Piece.rotations().indexOf( this.rotation ) +1) % 4 ]
   }
 
+  unRotate() {
+    this.rotation = Piece.roations()[( Piece.rotations().indexOf( this.rotation ) -1) % 4]
+  }
+
   left() {
     this.offset = new Point(this.offset.row, this.offset.col -1)
   }
@@ -68,13 +72,17 @@ export class Piece {
     this.offset = new Point(this.offset.row, this.offset.col +1)
   }
 
-  unRotate() {
-    this.rotation = Piece.roations()[( Piece.rotations().indexOf( this.rotation ) -1) % 4]
+  hasPoint(point) {
+       return this.points().some( item => item.sameAs(point) )
+   }
+
+  fallOne() {
+    this.offset = new Point( this.offset.row +1, this.offset.col )
   }
 
-  hasPoint(point) {
-       return this.points().some(item => item.sameAs(point));
-   }
+  liftOne() {
+   this.offset = new Point( this.offset.row -1, this.offset.col )
+  }
 
   static rotations() {
     return ['N', 'E', 'S', 'W']
@@ -85,19 +93,22 @@ export class Piece {
 export class Game {
   constructor() {
     this.rows = 15
-    this.cols = 20
+    this.cols = 15
     this.rubble = []
     this.startAPiece()
   }
 
   tick() {
-    this.fallingPiece.offset = this.fallingPiece.offset.fallOne()
-    if ( this.fallingPiece.maxRow() >= this.rows) {
+    this.transactionDo( ()=> this.fallingPiece.fallOne(), ()=> this.fallingPiece.liftOne() )
+    if ( this.fallingPiece.maxRow() == this.rows ) {
       this.convertToRubble()
       return this
     }
 
-    this.fallingPiece.offset = this.fallingPiece.offset.fallOne()
+    const nextPos = this.fallingPiece.points().map( point => new Point( point.row +1, point.col ))
+    if ( nextPos.some( point => this.rubble.some( rubble => rubble.sameAs( point ) ) ) ) {
+      this.convertToRubble()
+    }
     return this
   }
 
@@ -107,25 +118,49 @@ export class Game {
   }
 
   startAPiece() {
-    this.fallingPiece = new Piece(shapes.selectRandom() )
+    this.fallingPiece = new Piece( shapes.selectRandom() )
   }
 
   rotate() {
-    this.fallingPiece.rotate()
+    this.transactionDo(
+      () => this.fallingPiece.rotate(),
+      () => this.fallingPiece.unRotate()
+    )
     return this
   }
 
   left() {
-    this.fallingPiece.left()
+    this.transactionDo(
+      () => this.fallingPiece.left(),
+      () => this.fallingPiece.right()
+    )
     return this
   }
 
   right() {
-    this.fallingPiece.right()
+    this.transactionDo(
+      () => this.fallingPiece.right(),
+      () => this.fallingPiece.left()
+    )
     return this
   }
 
+  transactionDo(thing, compensation) {
+    thing()
+    if (this.fallingPieceIsOutOfBounds() || this.fallingPieceOverlapsRubble() ) {
+      compensation()
+    }
+  }
 
+  fallingPieceIsOutOfBounds() {
+    return this.fallingPiece.minCol() < 1 ||
+      this.fallingPiece.maxCol() > this.cols ||
+      this.fallingPiece.maxRow() > this.rows
+  }
+
+  fallingPieceOverlapsRubble() {
+    return this.fallingPiece.points().some( p => this.rubble.some( r => r.sameAs(p) ) )
+  }
 }
 
 export const shapes = {
