@@ -1,12 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as Components from './components/components'
-import * as Model from './components/models'
-// import Game from './components/Game'
+import * as Components from './components'
+import * as Model from './models'
 import { createStore } from 'redux'
 import './index.css';
-
-// import App from './App';
 
 const reducer = ( state = new Model.Game(), action ) => {
   switch (action.type) {
@@ -16,8 +13,6 @@ const reducer = ( state = new Model.Game(), action ) => {
     default:
       return state
   }
-  //return state
-
 }
 
 let store = createStore( reducer )
@@ -30,21 +25,3 @@ store.subscribe( () => {
 })
 
 setInterval( () => store.dispatch({ type: 'TICK' }), 500 )
-
-
-
-// ReactDOM.render(
-//   <div>
-//     { data.map( c => <Components.ShapeView shape={c} /> )}
-//   </div>,
-//   document.getElementById('root')
-// )
-
-
-// ReactDOM.render(
-//   <App />,
-//   document.getElementById('root')
-// );
-
-
-{/*  */}
