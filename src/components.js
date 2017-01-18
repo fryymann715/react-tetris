@@ -1,22 +1,43 @@
 import * as React from 'react'
 
 export class GameView extends React.Component {
+
+  checkGameStatus() {
+    return (this.props.game.isGameOver() )
+  }
+
   render() {
     const classString = this.props.game.fallingPiece.classString
+    console.log(this.props)
     return (
       <div className='border' style={{ width: this.props.game.cols*25,
         height: this.props.game.rows*25}}>
-        { this.props.game.isGameOver() ?
-          <span>GAME OVER</span> :
+        { this.checkGameStatus() ?
+          <span>GAME OVER
+            <PieceView piece={this.props.game.fallingPiece} />
+            <RubbleView rubble={this.props.game.rubble} />
+            <ScoreView score={this.props.game.score} />
+          </span> :
           <span>
             <PieceView piece={this.props.game.fallingPiece} />
             <RubbleView rubble={this.props.game.rubble} />
+            <ScoreView score={this.props.game.score} />
           </span>
          }
       </div>
     )
   }
 
+}
+
+interface ScoreViewProps { score:number }
+export class ScoreView extends React.Component {
+  render() {
+    console.log( this.props)
+    return <div className="score-display">
+      { this.props.score }
+    </div>
+  }
 }
 
 export class PieceView extends React.Component {

@@ -1,4 +1,5 @@
 body,div {
+  background-color: black;
   margin: 0;
   padding: 0;
   font-family: sans-serif;
@@ -6,17 +7,17 @@ body,div {
 
 .square {
   background-color: black;
-  filter: invert(100%);
-  box-shadow: inset 0 0 10px purple;
+  /*filter: invert(100%);*/
+  box-shadow: inset 0 0 10px black;
   width: 25px;
   height: 25px;
   position: absolute;
 }
 
 .border {
+  color: red;
   position: absolute;
   border: solid red 1px;
-  background-color: rgba(255, 255, 255, .7);
 }
 
 
@@ -38,4 +39,17 @@ body,div {
 
 .O {
   background-color: #aa6909;
+}
+
+.rubble {
+  background-color: grey;
+}
+
+.score-display {
+  position: absolute;
+  right: 10px;
+  top: 0px;
+  opacity: 0.4;
+  color: #666;
+  font: 2em "Open Sans", sans-serif;
 }

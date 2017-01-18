@@ -1,22 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as Components from './components'
-import * as Model from './models'
 import * as Mousetrap from 'mousetrap'
+import Game from './Game'
 import { createStore } from 'redux'
 import './index.css';
 
-Mousetrap.bind('space', () => store.dispatch({type: 'ROTATE'}))
 Mousetrap.bind('up', () => store.dispatch({type: 'ROTATE'}))
 Mousetrap.bind('left', () => store.dispatch({type: 'LEFT'}))
 Mousetrap.bind('right', () => store.dispatch({type: 'RIGHT'}))
 
-const reducer = ( state = new Model.Game(), action ) => {
+const reducer = ( state = new Game(), action ) => {
   switch (action.type) {
     case 'TICK':
       const revedState = state.tick()
-      if ( !revedState.isGameOver() ) {
-        setTimeout( () => store.dispatch({ type: 'TICK' }), 300 )
+      if ( !revedState.isGameOver() || !revedState.isPaused() ) {
+        setTimeout( () => store.dispatch({ type: 'TICK' }), revedState.interval )
       }
       return revedState
     case 'ROTATE':
@@ -39,6 +38,4 @@ store.subscribe( () => {
   )
 })
 
-// store.dispatch({ type: 'TICK' })
-
-setTimeout( () => store.dispatch({ type: 'TICK' }), 500)
+store.dispatch({ type: 'TICK' })
