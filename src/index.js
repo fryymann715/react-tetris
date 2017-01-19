@@ -6,11 +6,7 @@ import Game from './Game'
 import { createStore } from 'redux'
 import './index.css';
 
-Mousetrap.bind('up', () => store.dispatch({type: 'ROTATE'}))
-Mousetrap.bind('left', () => store.dispatch({type: 'LEFT'}))
-Mousetrap.bind('right', () => store.dispatch({type: 'RIGHT'}))
-
-const reducer = ( state = new Game(), action ) => {
+const gameStream = ( state = new Game(), action ) => {
   switch (action.type) {
     case 'TICK':
       const revedState = state.tick()
@@ -29,13 +25,15 @@ const reducer = ( state = new Game(), action ) => {
   }
 }
 
-let store = createStore( reducer )
-
+const store = createStore( gameStream )
 store.subscribe( () => {
   ReactDOM.render(
     <Components.GameView game={ store.getState() } />,
     document.getElementById( 'root' )
   )
 })
-
 store.dispatch({ type: 'TICK' })
+
+Mousetrap.bind('up', () => store.dispatch({type: 'ROTATE'}))
+Mousetrap.bind('left', () => store.dispatch({type: 'LEFT'}))
+Mousetrap.bind('right', () => store.dispatch({type: 'RIGHT'}))

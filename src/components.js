@@ -7,8 +7,6 @@ export class GameView extends React.Component {
   }
 
   render() {
-    const classString = this.props.game.fallingPiece.classString
-    console.log(this.props)
     return (
       <div className='border' style={{ width: this.props.game.cols*25,
         height: this.props.game.rows*25}}>
@@ -33,7 +31,6 @@ export class GameView extends React.Component {
 interface ScoreViewProps { score:number }
 export class ScoreView extends React.Component {
   render() {
-    console.log( this.props)
     return <div className="score-display">
       { this.props.score }
     </div>
