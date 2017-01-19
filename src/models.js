@@ -38,7 +38,7 @@ export class Shape {
 }
 
 export class Piece {
-  constructor(shape, offset = new Point (1, 10) ) {
+  constructor(shape, offset = new Point (-2, 5) ) {
     this.shape = shape
     this.offset = offset
     this.rotation = 'N'

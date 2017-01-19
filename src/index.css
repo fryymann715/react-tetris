@@ -24,10 +24,19 @@ body {
   position: absolute;
   background-color: black;
   box-shadow: 4px 4px 20px #4d4d4d;
-  border: groove white 1px;
-  left: 30%;
-  top: 175px;
+  border: groove white 1px ;
   color: red;
+}
+
+.game-1 {
+  left: 10%;
+  top: 200px;
+}
+
+.game-2 {
+  left: 70%;
+  top: 200px;
+
 }
 
 

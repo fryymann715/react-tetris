@@ -3,26 +3,43 @@ import * as React from 'react'
 export class GameView extends React.Component {
 
   checkGameStatus() {
-    return (this.props.game.isGameOver() )
+    return ( this.props.game.game1.isGameOver() || this.props.game.game2.isGameOver() )
   }
 
   render() {
     return (
-      <div className='border' style={{ width: this.props.game.cols*25,
-        height: this.props.game.rows*25}}>
+      <div>
+      <div className='border game-1' style={{ width: this.props.game.game1.cols*25,
+        height: this.props.game.game1.rows*25}}>
         { this.checkGameStatus() ?
           <span>GAME OVER
-            <PieceView piece={this.props.game.fallingPiece} />
-            <RubbleView rubble={this.props.game.rubble} />
-            <ScoreView score={this.props.game.score} />
+            <PieceView piece={this.props.game.game1.fallingPiece} />
+            <RubbleView rubble={this.props.game.game1.rubble} />
+            <ScoreView score={this.props.game.game1.score} />
           </span> :
           <span>
-            <PieceView piece={this.props.game.fallingPiece} />
-            <RubbleView rubble={this.props.game.rubble} />
-            <ScoreView score={this.props.game.score} />
+            <PieceView piece={this.props.game.game1.fallingPiece} />
+            <RubbleView rubble={this.props.game.game1.rubble} />
+            <ScoreView score={this.props.game.game1.score} />
           </span>
          }
       </div>
+      <div className='border game-2' style={{ width: this.props.game.game2.cols*25,
+        height: this.props.game.game2.rows*25}}>
+        { this.checkGameStatus() ?
+          <span>GAME OVER
+            <PieceView piece={this.props.game.game2.fallingPiece} />
+            <RubbleView rubble={this.props.game.game2.rubble} />
+            <ScoreView score={this.props.game.game2.score} />
+          </span> :
+          <span>
+            <PieceView piece={this.props.game.game2.fallingPiece} />
+            <RubbleView rubble={this.props.game.game2.rubble} />
+            <ScoreView score={this.props.game.game2.score} />
+          </span>
+         }
+      </div>
+    </div>
     )
   }
 

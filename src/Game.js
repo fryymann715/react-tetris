@@ -3,11 +3,11 @@ import * as Models from './models'
 
 export default class Game {
   constructor() {
-    this.rows = 15
-    this.cols = 15
+    this.rows = 20
+    this.cols = 10
     this.rubble = []
     this.score = 0
-    this.interval = 300
+    this.interval = 400
     this.startAPiece()
   }
 
