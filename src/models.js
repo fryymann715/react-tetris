@@ -1,6 +1,5 @@
 import * as _ from 'underscore'
 
-
 export class Point {
   constructor( row, col ) {
     this.row = row
@@ -18,10 +17,13 @@ export class Point {
     return new Point(this.row +1, this.col)
   }
 
+  isAbove( p2 ) {
+    return this.row === p2.row +1 && this.col === p2.col
+  }
+
   sameAs( p2 ) {
     return this.row === p2.row && this.col === p2.col
   }
-
 }
 
 export class Shape {
@@ -29,12 +31,26 @@ export class Shape {
     this.name = name
     this.rotator = rotator
     this.classString = `square ${name}`
-    this.isPaused = false
   }
   pointsRotated( rotation ) {
     return this.rotator( rotation )
   }
+}
 
+const ROTATIONS = ['N', 'E', 'S', 'W']
+
+class Rotation {
+  constructor( current ) {
+    this.index = ROTATIONS.indexOf( current )
+  }
+
+  next() {
+    return ROTATIONS[ ( this.index + 1 ) % 4 ]
+  }
+
+  previous() {
+    return ROTATIONS[ ( this.index - 1 ) % 4 ]
+  }
 }
 
 export class Piece {
@@ -46,7 +62,8 @@ export class Piece {
   }
 
   points() {
-    return this.shape.pointsRotated( this.rotation ).map( ( point, ix ) => point.add( this.offset ) );
+    return this.shape.pointsRotated( this.rotation )
+    .map( ( point, ix ) => point.add( this.offset ) );
   }
 
   maxRow() {
@@ -62,11 +79,11 @@ export class Piece {
   }
 
   rotate() {
-    this.rotation = Piece.rotations()[( Piece.rotations().indexOf( this.rotation ) +1) % 4 ]
+    this.rotation = (new Rotation( this.rotation )).next()
   }
 
   unRotate() {
-    this.rotation = Piece.roations()[( Piece.rotations().indexOf( this.rotation ) -1) % 4]
+    this.rotation = (new Rotation( this.rotation )).previous()
   }
 
   left() {
@@ -82,27 +99,25 @@ export class Piece {
    }
 
   fallOne() {
-    this.offset = new Point( this.offset.row +1, this.offset.col )
+    if( ! this.pauseDown ) {
+      this.offset = new Point( this.offset.row +1, this.offset.col )
+    }
   }
 
   liftOne() {
    this.offset = new Point( this.offset.row -1, this.offset.col )
-  }
-
-  static rotations() {
-    return ['N', 'E', 'S', 'W']
-  }
-
+ }
 }
 
 export const shapes = {
-  'O': new Shape( 'O', rotation => [ new Point(1,1), new Point(1, 2), new Point(2, 1), new Point(2, 2) ] ),
+  'O': new Shape( 'O', rotation =>
+    [ new Point(1,1), new Point(1, 2), new Point(2, 1), new Point(2, 2) ] ),
   'I': new Shape( 'I', rotation => {
     switch (rotation) {
-      case 'N': return [new Point(1,1), new Point(2,1),new Point(3,1), new Point(4,1)]
-      case 'E': return [new Point(2,1), new Point(2,2),new Point(2,3), new Point(2,4)]
-      case 'S': return [new Point(1,1), new Point(2,1),new Point(3,1), new Point(4,1)]
-      case 'W': return [new Point(2,1), new Point(2,2),new Point(2,3), new Point(2,4)]
+      case 'N': return [new Point(2,1), new Point(2,2),new Point(2,3), new Point(2,4)]
+      case 'E': return [new Point(1,1), new Point(2,1),new Point(3,1), new Point(4,1)]
+      case 'S': return [new Point(2,1), new Point(2,2),new Point(2,3), new Point(2,4)]
+      case 'W': return [new Point(1,1), new Point(2,1),new Point(3,1), new Point(4,1)]
       default:
     }
   }),

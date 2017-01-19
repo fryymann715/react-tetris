@@ -9,10 +9,11 @@ export class GameView extends React.Component {
   render() {
     return (
       <div>
+        <NextPieceView piece={this.props.game.game1.nextPiece} className='next1'/>
       <div className='border game-1' style={{ width: this.props.game.game1.cols*25,
         height: this.props.game.game1.rows*25}}>
         { this.checkGameStatus() ?
-          <span>GAME OVER
+          <span><h2 className="game-over">GAME OVER</h2>
             <PieceView piece={this.props.game.game1.fallingPiece} />
             <RubbleView rubble={this.props.game.game1.rubble} />
             <ScoreView score={this.props.game.game1.score} />
@@ -24,10 +25,11 @@ export class GameView extends React.Component {
           </span>
          }
       </div>
+      <NextPieceView piece={this.props.game.game2.nextPiece} className='next2'/>
       <div className='border game-2' style={{ width: this.props.game.game2.cols*25,
         height: this.props.game.game2.rows*25}}>
         { this.checkGameStatus() ?
-          <span>GAME OVER
+          <span><h2 className="game-over">GAME OVER</h2>
             <PieceView piece={this.props.game.game2.fallingPiece} />
             <RubbleView rubble={this.props.game.game2.rubble} />
             <ScoreView score={this.props.game.game2.score} />
@@ -62,6 +64,22 @@ export class PieceView extends React.Component {
         { this.props.piece.points().map( square =>
           <Square
             key={count++}
+            row={square.row}
+            col={square.col}
+            classString={this.props.piece.classString}
+          /> )}
+      </div>
+    )
+  }
+}
+
+export class NextPieceView extends React.Component {
+  render() {
+    return (
+      <div className={this.props.className}>
+        { this.props.piece.points().map( (square, key) =>
+          <Square
+            key={key}
             row={square.row}
             col={square.col}
             classString={this.props.piece.classString}

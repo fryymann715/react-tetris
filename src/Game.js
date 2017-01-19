@@ -7,22 +7,37 @@ export default class Game {
     this.cols = 10
     this.rubble = []
     this.score = 0
-    this.interval = 400
-    this.startAPiece()
+    this.initPiece()
   }
 
   tick() {
-    this.transactionDo( ()=> this.fallingPiece.fallOne(), ()=> this.fallingPiece.liftOne() )
+    this.transactionDo(
+      ()=> this.fallingPiece.fallOne(),
+      ()=> this.fallingPiece.liftOne() )
     if ( this.fallingPiece.maxRow() === this.rows ) {
-      this.convertToRubble()
+      setTimeout( () => this.convertToRubble(), 200 )
       return this
     }
-
-    const nextPos = this.fallingPiece.points().map( point => new Models.Point( point.row +1, point.col ))
-    if ( nextPos.some( point => this.rubble.some( rubble => rubble.sameAs( point ) ) ) ) {
-      this.convertToRubble()
+    if ( this.nextPositionIsRubble() ) {
+      setTimeout( () => this.checkIfRubble(), 200 )
     }
     return this
+  }
+
+  checkIfRubble() {
+    if ( this.nextPositionIsRubble() ) {
+      this.convertToRubble()
+    }
+  }
+
+  nextPositionIsRubble() {
+    const nextPos = this.fallingPiece.points()
+    .map( point => new Models.Point( point.row +1, point.col ))
+    return nextPos
+      .some( point => this.rubble
+        .some( rubble => rubble
+          .sameAs( point ) ) )
+
   }
 
   convertToRubble() {
@@ -31,9 +46,8 @@ export default class Game {
     completedRows.forEach( row => this.collapseRow( row ) )
     this.score += this.calculateAward(completedRows)
     if ( !this.isGameOver() ) {
-      this.interval = 300
-      this.startAPiece()
-    }
+        this.startAPiece()
+      }
   }
 
   completedRows() {
@@ -44,15 +58,23 @@ export default class Game {
 
   collapseRow(row) {
     this.rubble = this.rubble.filter(point => point.row !== row)
-    this.rubble.filter( point => point.row < row ).forEach( point => point.row += 1)
+    this.rubble
+    .filter( point => point.row < row )
+    .forEach( point => point.row += 1)
   }
 
   rubbleHas(row, col) {
     return this.rubble.some( point => point.row === row && point.col === col)
   }
 
-  startAPiece() {
+  initPiece() {
     this.fallingPiece = new Models.Piece( Models.shapes.selectRandom() )
+    this.nextPiece = new Models.Piece( Models.shapes.selectRandom() )
+  }
+
+  startAPiece() {
+    this.fallingPiece = this.nextPiece
+    this.nextPiece = new Models.Piece( Models.shapes.selectRandom() )
   }
 
   rotate() {
@@ -79,9 +101,16 @@ export default class Game {
     return this
   }
 
-  pause() {
-    this.isPaused = this.isPaused ? false : true
-  }
+  down() {
+    while (
+      !this.fallingPieceIsOutOfBounds() &&
+      !this.fallingPieceOverlapsRubble() )
+      {
+        this.fallingPiece.fallOne()
+      }
+      this.fallingPiece.liftOne()
+      return this
+    }
 
   transactionDo(thing, compensation) {
     thing()
@@ -97,7 +126,10 @@ export default class Game {
   }
 
   fallingPieceOverlapsRubble() {
-    return this.fallingPiece.points().some( p => this.rubble.some( r => r.sameAs(p) ) )
+    return this.fallingPiece.points()
+    .some( point => this.rubble
+      .some( rubble => rubble
+        .sameAs(point) ) )
   }
 
   calculateAward(completedRows) {
@@ -109,10 +141,6 @@ export default class Game {
       4: 1200
     }
     return scoreMap[completedRows.length]
-  }
-
-  isPaused() {
-    return this.isPaused
   }
 
   isGameOver() {
