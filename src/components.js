@@ -3,41 +3,54 @@ import * as React from 'react'
 export class GameView extends React.Component {
 
   checkGameStatus() {
-    return ( this.props.game.game1.isGameOver() || this.props.game.game2.isGameOver() )
+    return ( this.props.game1.isGameOver() || this.props.game2.isGameOver() )
   }
 
   render() {
+
+    const playerOneMeteor = this.props.game2.meteor ?
+    <Meteor square={this.props.game2.meteor} /> :
+  <div></div>
+
+  const playerTwoMeteor = this.props.game1.meteor ?
+  <Meteor square={this.props.game1.meteor} /> :
+<div></div>
+
     return (
       <div>
-        <NextPieceView piece={this.props.game.game1.nextPiece} className='next1'/>
-      <div className='border game-1' style={{ width: this.props.game.game1.cols*25,
-        height: this.props.game.game1.rows*25}}>
+      <NextPieceView piece={this.props.game1.nextPiece} className='next1'/>
+      <div className='border game-1' style={{ width: this.props.width,
+        height: this.props.height}}>
         { this.checkGameStatus() ?
-          <span><h2 className="game-over">GAME OVER</h2>
-            <PieceView piece={this.props.game.game1.fallingPiece} />
-            <RubbleView rubble={this.props.game.game1.rubble} />
-            <ScoreView score={this.props.game.game1.score} />
+          <span>
+            <h2 className="game-over">GAME OVER</h2>
+            <PieceView piece={this.props.game1.fallingPiece} />
+            <RubbleView rubble={this.props.game1.rubble} />
+            <ScoreView score={this.props.game1.score} />
           </span> :
           <span>
-            <PieceView piece={this.props.game.game1.fallingPiece} />
-            <RubbleView rubble={this.props.game.game1.rubble} />
-            <ScoreView score={this.props.game.game1.score} />
+            { playerOneMeteor }
+            <PieceView piece={this.props.game1.fallingPiece} />
+            <RubbleView rubble={this.props.game1.rubble} />
+            <ScoreView score={this.props.game1.score} />
           </span>
          }
       </div>
-      <NextPieceView piece={this.props.game.game2.nextPiece} className='next2'/>
-      <div className='border game-2' style={{ width: this.props.game.game2.cols*25,
-        height: this.props.game.game2.rows*25}}>
+      <NextPieceView piece={this.props.game2.nextPiece} className='next2'/>
+      <div className='border game-2' style={{ width: this.props.width,
+        height: this.props.height}}>
         { this.checkGameStatus() ?
-          <span><h2 className="game-over">GAME OVER</h2>
-            <PieceView piece={this.props.game.game2.fallingPiece} />
-            <RubbleView rubble={this.props.game.game2.rubble} />
-            <ScoreView score={this.props.game.game2.score} />
+          <span>
+            <h2 className="game-over">GAME OVER</h2>
+            <PieceView piece={this.props.game2.fallingPiece} />
+            <RubbleView rubble={this.props.game2.rubble} />
+            <ScoreView score={this.props.game2.score} />
           </span> :
           <span>
-            <PieceView piece={this.props.game.game2.fallingPiece} />
-            <RubbleView rubble={this.props.game.game2.rubble} />
-            <ScoreView score={this.props.game.game2.score} />
+            { playerTwoMeteor }
+            <PieceView piece={this.props.game2.fallingPiece} />
+            <RubbleView rubble={this.props.game2.rubble} />
+            <ScoreView score={this.props.game2.score} />
           </span>
          }
       </div>
@@ -100,6 +113,21 @@ export class RubbleView extends React.Component {
             col={square.col}
             classString='square rubble' /> )}
       </span>
+    )
+  }
+}
+
+export class Meteor extends React.Component {
+  render() {
+    return (
+      <div>
+        <Square
+          classString='square meteor'
+          col={ this.props.square.col }
+          row={ this.props.square.row }
+        />
+      </div>
+
     )
   }
 }

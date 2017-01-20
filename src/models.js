@@ -63,7 +63,7 @@ export class Piece {
 
   points() {
     return this.shape.pointsRotated( this.rotation )
-    .map( ( point, ix ) => point.add( this.offset ) );
+      .map( ( point, ix ) => point.add( this.offset ) );
   }
 
   maxRow() {
@@ -108,6 +108,62 @@ export class Piece {
    this.offset = new Point( this.offset.row -1, this.offset.col )
  }
 }
+
+
+export class Meteor {
+  constructor( offset = new Point (-2, Math.floor(Math.random() * 10 ) )) {
+    this.shape = new Point(1,1)
+    this.offset = offset
+  }
+
+  // points() {
+  //   return this.shape.pointsRotated( this.rotation )
+  //     .map( ( point, ix ) => point.add( this.offset ) );
+  // }
+
+  maxRow() {
+    return Math.max.apply( null, this.points().map( point => point.row ))
+  }
+
+  maxCol() {
+    return Math.max.apply( null, this.points().map( point => point.col ))
+  }
+
+  minCol() {
+    return Math.min.apply( null, this.points().map( point => point.col ))
+  }
+
+  hasPoint(point) {
+       return this.points().some( item => item.sameAs(point) )
+   }
+
+  fallOne() {
+    if( ! this.pauseDown ) {
+      this.offset = new Point( this.offset.row +1, this.offset.col )
+    }
+  }
+}
+
+// export class Meteor {
+//   constructor() {
+//     this.point = new Point(1,1)
+//     this.offset = new Point(1, (Math.floor(Math.random() * 10) ))
+//   }
+//
+//   dropOne() {
+//     this.offset = new Point( this.offset.row +1, this.offset.col )
+//   }
+//
+//   unDropOne() {
+//     this.offset = new Point( this.offset.row -1, this.offset.col )
+//   }
+//
+//   maxRow() {
+//     return Math.max.apply( null, this.point.row)
+//   }
+//
+//
+// }
 
 export const shapes = {
   'O': new Shape( 'O', rotation =>

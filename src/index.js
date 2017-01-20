@@ -3,13 +3,19 @@ import ReactDOM from 'react-dom';
 import * as Components from './components'
 import * as Mousetrap from 'mousetrap'
 import Game from './Game'
+import * as types from './actions'
 import { createStore } from 'redux'
 import './index.css';
 
 let pausedBoolean = false
 
+const gameDimensions = {
+  rows: 20,
+  cols: 10
+}
+
 const dispatchTick = () => {
-  setTimeout( () => store.dispatch({ type: 'TICK' }), 400 )
+  setTimeout( () => store.dispatch({ type: types.TICK }), 400 )
 }
 
 const isGameInactive = ( state ) => {
@@ -19,7 +25,7 @@ const isGameInactive = ( state ) => {
 
 const gameStream = ( state = { 'game1': new Game(), 'game2': new Game() }, action ) => {
   switch ( action.type ) {
-    case 'TICK':
+    case types.TICK:
       const revedState = {'game1': state.game1.tick(), 'game2': state.game2.tick() }
       if ( !revedState.game1.isGameOver() &&
       !revedState.game2.isGameOver() &&
@@ -27,39 +33,39 @@ const gameStream = ( state = { 'game1': new Game(), 'game2': new Game() }, actio
         dispatchTick()
       }
       return revedState
-    case 'ROTATE':
+    case types.ROTATE:
       return isGameInactive( state ) ?
         state :
         state = { 'game1': state.game1.rotate(), 'game2': state.game2 }
-    case 'LEFT':
+    case types.LEFT:
       return isGameInactive( state ) ?
       state :
       state = { 'game1': state.game1.left(), 'game2': state.game2 }
-    case 'RIGHT':
+    case types.RIGHT:
       return isGameInactive( state ) ?
       state :
       state = { 'game1': state.game1.right(), 'game2': state.game2 }
-    case 'DOWN':
+    case types.DOWN:
       return isGameInactive( state ) ?
       state :
       state = { 'game1': state.game1.down(), 'game2': state.game2 }
-    case 'ROTATE2':
+    case types.ROTATE2:
       return isGameInactive( state ) ?
       state :
       state = { 'game1': state.game1, 'game2': state.game2.rotate() }
-    case 'LEFT2':
+    case types.LEFT2:
       return isGameInactive( state ) ?
       state :
       state = { 'game1': state.game1, 'game2': state.game2.left() }
-    case 'RIGHT2':
+    case types.RIGHT2:
       return isGameInactive( state ) ?
       state :
       state = { 'game1': state.game1, 'game2': state.game2.right() }
-    case 'DOWN2':
+    case types.DOWN2:
       return isGameInactive( state ) ?
       state :
       state = { 'game1': state.game1, 'game2': state.game2.down() }
-    case 'PAUSE':
+    case types.PAUSE:
       pausedBoolean = ( pausedBoolean === false ) ? true : false
       dispatchTick()
       return state
@@ -68,21 +74,29 @@ const gameStream = ( state = { 'game1': new Game(), 'game2': new Game() }, actio
   }
 }
 
+
 const store = createStore( gameStream )
 store.subscribe( () => {
   ReactDOM.render(
-    <Components.GameView game={ store.getState() } />,
+    <Components.GameView
+      game1={ store.getState().game1 }
+      game2={ store.getState().game2 }
+      height={ gameDimensions.rows * 25 }
+      width={ gameDimensions.cols * 25 }
+     />,
     document.getElementById( 'root' )
   )
 })
-store.dispatch({ type: 'TICK' })
+store.dispatch({ type: types.TICK })
 
-Mousetrap.bind('w', () => store.dispatch({type: 'ROTATE'}))
-Mousetrap.bind('a', () => store.dispatch({type: 'LEFT'}))
-Mousetrap.bind('s', () => store.dispatch({type: 'DOWN'}))
-Mousetrap.bind('d', () => store.dispatch({type: 'RIGHT'}))
-Mousetrap.bind('up', () => store.dispatch({type: 'ROTATE2'}))
-Mousetrap.bind('left', () => store.dispatch({type: 'LEFT2'}))
-Mousetrap.bind('down', () => store.dispatch({type: 'DOWN2'}))
-Mousetrap.bind('right', () => store.dispatch({type: 'RIGHT2'}))
-Mousetrap.bind('space', () => store.dispatch({type: 'PAUSE'}) )
+Mousetrap.bind( '0', () => console.log('BUTTON!') )
+
+Mousetrap.bind('w', () => store.dispatch({type: types.ROTATE }))
+Mousetrap.bind('a', () => store.dispatch({type: types.LEFT }))
+Mousetrap.bind('s', () => store.dispatch({type: types.DOWN} ))
+Mousetrap.bind('d', () => store.dispatch({type: types.RIGHT }))
+Mousetrap.bind('up', () => store.dispatch({type: types.ROTATE2 }))
+Mousetrap.bind('left', () => store.dispatch({type: types.LEFT2 }))
+Mousetrap.bind('down', () => store.dispatch({type: types.DOWN2 }))
+Mousetrap.bind('right', () => store.dispatch({type: types.RIGHT2 }))
+Mousetrap.bind('space', () => store.dispatch({type: types.PAUSE }) )

@@ -11,6 +11,7 @@ export default class Game {
   }
 
   tick() {
+    //this.meteor.fallOne()
     this.transactionDo(
       ()=> this.fallingPiece.fallOne(),
       ()=> this.fallingPiece.liftOne() )
@@ -31,13 +32,10 @@ export default class Game {
   }
 
   nextPositionIsRubble() {
-    const nextPos = this.fallingPiece.points()
-    .map( point => new Models.Point( point.row +1, point.col ))
-    return nextPos
-      .some( point => this.rubble
-        .some( rubble => rubble
-          .sameAs( point ) ) )
-
+    const nextPosition = this.fallingPiece.points().map( point =>
+      new Models.Point( point.row +1, point.col ))
+    return  nextPosition.some( point =>
+      this.rubble.some( rubble => rubble.sameAs( point ) ))
   }
 
   convertToRubble() {
@@ -61,6 +59,8 @@ export default class Game {
     this.rubble
     .filter( point => point.row < row )
     .forEach( point => point.row += 1)
+    this.addMeteor()
+    console.log('row complete');
   }
 
   rubbleHas(row, col) {
@@ -75,6 +75,10 @@ export default class Game {
   startAPiece() {
     this.fallingPiece = this.nextPiece
     this.nextPiece = new Models.Piece( Models.shapes.selectRandom() )
+  }
+
+  addMeteor() {
+    this.meteor = new Models.Meteor()
   }
 
   rotate() {
@@ -102,15 +106,17 @@ export default class Game {
   }
 
   down() {
-    while (
-      !this.fallingPieceIsOutOfBounds() &&
-      !this.fallingPieceOverlapsRubble() )
+    while ( this.pieceIsInAValidPosition() )
       {
         this.fallingPiece.fallOne()
       }
       this.fallingPiece.liftOne()
       return this
-    }
+  }
+
+  pieceIsInAValidPosition() {
+    return !( this.fallingPieceIsOutOfBounds() || this.fallingPieceOverlapsRubble() )
+  }
 
   transactionDo(thing, compensation) {
     thing()
@@ -126,10 +132,8 @@ export default class Game {
   }
 
   fallingPieceOverlapsRubble() {
-    return this.fallingPiece.points()
-    .some( point => this.rubble
-      .some( rubble => rubble
-        .sameAs(point) ) )
+    return this.fallingPiece.points().some( point =>
+      this.rubble.some( rubble => rubble.sameAs(point) ) )
   }
 
   calculateAward(completedRows) {
