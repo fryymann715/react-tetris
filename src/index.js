@@ -7,7 +7,7 @@ import * as types from './actions'
 import { createStore } from 'redux'
 import './index.css';
 
-let pausedBoolean = false
+let isPaused = false
 
 const gameDimensions = {
   rows: 20,
@@ -19,7 +19,7 @@ const dispatchTick = () => {
 }
 
 const isGameInactive = ( state ) => {
-  return ( pausedBoolean === true ||
+  return ( isPaused === true ||
     (state.game1.isGameOver() === true || state.game2.isGameOver() === true ) )
 }
 
@@ -29,7 +29,7 @@ const gameStream = ( state = { 'game1': new Game(), 'game2': new Game() }, actio
       const revedState = {'game1': state.game1.tick(), 'game2': state.game2.tick() }
       if ( !revedState.game1.isGameOver() &&
       !revedState.game2.isGameOver() &&
-      pausedBoolean === false ) {
+      isPaused === false ) {
         dispatchTick()
       }
       return revedState
@@ -66,9 +66,15 @@ const gameStream = ( state = { 'game1': new Game(), 'game2': new Game() }, actio
       state :
       state = { 'game1': state.game1, 'game2': state.game2.down() }
     case types.PAUSE:
-      pausedBoolean = ( pausedBoolean === false ) ? true : false
+      isPaused = ( isPaused === false ) ? true : false
       dispatchTick()
       return state
+
+    case types.CAST_METEOR:
+      dispatchTick()
+      return isGameInactive( state ) ?
+      state :
+      state = { 'game1': state.game1, 'game2': state.game2 }
     default:
       return state
   }
@@ -89,7 +95,7 @@ store.subscribe( () => {
 })
 store.dispatch({ type: types.TICK })
 
-Mousetrap.bind( '0', () => console.log('BUTTON!') )
+Mousetrap.bind( '0', () => store.dispatch({ type: types.CAST_METEOR }) )
 
 Mousetrap.bind('w', () => store.dispatch({type: types.ROTATE }))
 Mousetrap.bind('a', () => store.dispatch({type: types.LEFT }))

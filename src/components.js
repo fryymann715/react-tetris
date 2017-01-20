@@ -8,13 +8,13 @@ export class GameView extends React.Component {
 
   render() {
 
-    const playerOneMeteor = this.props.game2.meteor ?
-    <Meteor square={this.props.game2.meteor} /> :
-  <div></div>
+    const playerOneMeteor = this.props.game1.meteor ?
+      <Meteor piece={this.props.game1.meteor} classString="square meteor"/> :
+      <div></div>
 
-  const playerTwoMeteor = this.props.game1.meteor ?
-  <Meteor square={this.props.game1.meteor} /> :
-<div></div>
+    const playerTwoMeteor = this.props.game2.meteor ?
+      <Meteor piece={this.props.game2.meteor} classString="square meteor" /> :
+      <div></div>
 
     return (
       <div>
@@ -71,12 +71,11 @@ export class ScoreView extends React.Component {
 
 export class PieceView extends React.Component {
   render() {
-    let count = 0
     return (
       <div>
-        { this.props.piece.points().map( square =>
+        { this.props.piece.points().map( (square, key) =>
           <Square
-            key={count++}
+            key={key}
             row={square.row}
             col={square.col}
             classString={this.props.piece.classString}
@@ -121,11 +120,13 @@ export class Meteor extends React.Component {
   render() {
     return (
       <div>
-        <Square
-          classString='square meteor'
-          col={ this.props.square.col }
-          row={ this.props.square.row }
-        />
+          { this.props.piece.points().map( (square, key) =>
+            <Square
+              key={key}
+              row={square.row}
+              col={square.col}
+              classString={this.props.classString}
+            /> )}
       </div>
 
     )
