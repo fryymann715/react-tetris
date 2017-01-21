@@ -1,9 +1,24 @@
 import * as React from 'react'
+import Sound from 'react-sound'
 
 export class GameView extends React.Component {
+  constructor( props ){
+    super( props )
+    this.play = this.play.bind( this )
+  }
 
   checkGameStatus() {
     return ( this.props.game1.isGameOver() || this.props.game2.isGameOver() )
+  }
+
+  componentDidMount() {
+    this.play()
+  }
+
+
+  play() {
+    var audio = document.getElementById("audio")
+    audio.play()
   }
 
   render() {
@@ -37,6 +52,11 @@ export class GameView extends React.Component {
             <ScoreView score={this.props.game2.score} />
           </span>
       </div>
+      <audio id="audio" src='http://66.90.93.122/ost/tetris-gameboy-rip-/vcdiehbhzz/tetris-gameboy-01.mp3'></audio>
+      {/* <Sound
+        url={"/public/tetris-gameboy-o1.mp3"}
+        playStatus={ Sound.status.PLAYING }
+       /> */}
     </div>
     )
   }
