@@ -8,7 +8,6 @@ export default class Game {
     this.rubble = []
     this.score = 0
     this.initPiece()
-    this.addMeteor()
   }
 
   tick() {

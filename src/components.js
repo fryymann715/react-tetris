@@ -7,7 +7,6 @@ export class GameView extends React.Component {
   }
 
   render() {
-
     const playerOneMeteor = this.props.game1.meteor ?
       <Meteor piece={this.props.game1.meteor} classString="square meteor"/> :
       <div></div>
@@ -21,43 +20,37 @@ export class GameView extends React.Component {
       <NextPieceView piece={this.props.game1.nextPiece} className='next1'/>
       <div className='border game-1' style={{ width: this.props.width,
         height: this.props.height}}>
-        { this.checkGameStatus() ?
           <span>
-            <h2 className="game-over">GAME OVER</h2>
-            <PieceView piece={this.props.game1.fallingPiece} />
-            <RubbleView rubble={this.props.game1.rubble} />
-            <ScoreView score={this.props.game1.score} />
-          </span> :
-          <span>
-            { playerOneMeteor }
+            <MessageView game={this.props.game1}/>
             <PieceView piece={this.props.game1.fallingPiece} />
             <RubbleView rubble={this.props.game1.rubble} />
             <ScoreView score={this.props.game1.score} />
           </span>
-         }
       </div>
       <NextPieceView piece={this.props.game2.nextPiece} className='next2'/>
       <div className='border game-2' style={{ width: this.props.width,
         height: this.props.height}}>
-        { this.checkGameStatus() ?
           <span>
-            <h2 className="game-over">GAME OVER</h2>
-            <PieceView piece={this.props.game2.fallingPiece} />
-            <RubbleView rubble={this.props.game2.rubble} />
-            <ScoreView score={this.props.game2.score} />
-          </span> :
-          <span>
-            { playerTwoMeteor }
+            <MessageView game= {this.props.game2} />
             <PieceView piece={this.props.game2.fallingPiece} />
             <RubbleView rubble={this.props.game2.rubble} />
             <ScoreView score={this.props.game2.score} />
           </span>
-         }
       </div>
     </div>
     )
   }
 
+}
+
+export class MessageView extends React.Component {
+
+  render() {
+    if ( this.props.game.isGameOver() ) {
+      return <h2 className="game-over">GAME OVER</h2>
+    }
+    return <div></div>
+  }
 }
 
 interface ScoreViewProps { score:number }
