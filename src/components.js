@@ -52,11 +52,7 @@ export class GameView extends React.Component {
             <ScoreView score={this.props.game2.score} />
           </span>
       </div>
-      <audio id="audio" src='http://66.90.93.122/ost/tetris-gameboy-rip-/vcdiehbhzz/tetris-gameboy-01.mp3'></audio>
-      {/* <Sound
-        url={"/public/tetris-gameboy-o1.mp3"}
-        playStatus={ Sound.status.PLAYING }
-       /> */}
+      <iframe className='iframe' width="0px" height="0px" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/120364266&amp;auto_play=true&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false"></iframe>
     </div>
     )
   }
