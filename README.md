@@ -1,20 +1,37 @@
 ### DK Tetris
 
+Clone, yarn, yarn start
+
+Player One Controls (WASD):
+  A, D - left and right
+    W  - rotate piece
+    S  - drop piece
+
+Player Two Controls(Arrow Keys):
+  Left, Right - left and right
+      Up      - rotate
+      Down    - drop piece
+   
+
+Press space bar to pause the game
+
 ## Specifications
 
-- [ ] User can start game after front page loads
-- [ ] As shape drops, the next shape to drop appears on page for user
-- [ ] If the colored blocks reach the top of the game console, player looses
-- [ ] Player can move the colored shape right or left
-- [ ] Player can rotate the colored shape to the right or the left
+- [x] User can start game after front page loads
+- [x] As shape drops, the next shape to drop appears on page for user
+- [x] If the colored blocks reach the top of the game console, player looses
+- [x] Player can move the colored shape right or left
+- [x] Player can rotate the colored shape to the right or the left
 - [ ] Player can reset/restart game at any time
-- [ ] Player can pause game
+- [x] Player can pause game
 
 ## Stretch Goals
-- [ ] Add scores to the player interface
+- [x] Add scores to the player interface
 - [ ] Add number of lines completed to the player interface
 - [ ] The game speeds up as time passes 
-- [ ] Player can drop the colored shape at anytime by holding down the down-arrow
+- [x] Player can drop the colored shape at anytime by holding down the down-arrow
+- [x] Multiple players supported
+- [ ] When a player completes a line a random piece is dropped into the opponents game.
 
 - [ ] The artifact produced is properly licensed, preferably with the [MIT license][mit-license].
 
