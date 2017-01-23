@@ -37,7 +37,6 @@ export default class Game {
       return this
     }
      else if ( this.nextMeteorPositionIsRubble() ) {
-      // setTimeout( () => this.checkIfRubble(), 200 )
       this.convertMeteorToRubble()
     }
     return this
@@ -66,7 +65,6 @@ export default class Game {
   }
 
   convertToRubble() {
-    // console.log(this.fallingPiece.points());
     this.rubble = this.rubble.concat( this.fallingPiece.points() )
     const completedRows = this.completedRows()
     completedRows.forEach( row => this.collapseRow( row ) )
@@ -95,8 +93,6 @@ export default class Game {
     this.rubble
     .filter( point => point.row < row )
     .forEach( point => point.row += 1)
-    this.addMeteor()
-    // console.log('row complete');
   }
 
   rubbleHas(row, col) {

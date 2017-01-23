@@ -1,24 +1,9 @@
 import * as React from 'react'
-import Sound from 'react-sound'
 
 export class GameView extends React.Component {
-  constructor( props ){
-    super( props )
-    this.play = this.play.bind( this )
-  }
 
   checkGameStatus() {
     return ( this.props.game1.isGameOver() || this.props.game2.isGameOver() )
-  }
-
-  componentDidMount() {
-    this.play()
-  }
-
-
-  play() {
-    var audio = document.getElementById("audio")
-    audio.play()
   }
 
   render() {
