@@ -7,7 +7,6 @@ node_modules
 coverage
 
 # production
-build
 
 # misc
 .DS_Store
@@ -15,3 +14,4 @@ build
 npm-debug.log
 
 notes
+.idea
