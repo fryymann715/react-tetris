@@ -11,9 +11,6 @@ export default class Game {
   }
 
   tick() {
-    if ( this.meteor ) {
-      this.doMeteorStuff()
-    }
 
     this.transactionDo(
       ()=> this.fallingPiece.fallOne(),
@@ -24,20 +21,6 @@ export default class Game {
     }
     if ( this.nextPositionIsRubble() ) {
       setTimeout( () => this.checkIfRubble(), 200 )
-    }
-    return this
-  }
-
-  doMeteorStuff() {
-    this.transactionDoMeteor(
-      ()=> this.meteor.fallOne(),
-      ()=> this.meteor.liftOne() )
-    if ( this.meteor.maxRow() === this.rows ) {
-      this.convertMeteorToRubble()
-      return this
-    }
-     else if ( this.nextMeteorPositionIsRubble() ) {
-      this.convertMeteorToRubble()
     }
     return this
   }
@@ -56,14 +39,6 @@ export default class Game {
       this.rubble.some( rubble => rubble.sameAs( point ) ))
   }
 
-  nextMeteorPositionIsRubble() {
-    const nextPosition = this.meteor.points().map( point =>
-      new Models.Point( point.row +1, point.col ))
-
-    return  nextPosition.some( point =>
-      this.rubble.some( rubble => rubble.sameAs( point ) ))
-  }
-
   convertToRubble() {
     this.rubble = this.rubble.concat( this.fallingPiece.points() )
     const completedRows = this.completedRows()
@@ -72,14 +47,6 @@ export default class Game {
     if ( !this.isGameOver() ) {
         this.startAPiece()
       }
-  }
-
-  convertMeteorToRubble() {
-    this.rubble = this.rubble.concat( this.meteor.points() )
-    const completedRows = this.completedRows()
-    completedRows.forEach( row => this.collapseRow( row ) )
-    this.score += this.calculateAward(completedRows)
-    this.meteor = null
   }
 
   completedRows() {
@@ -107,10 +74,6 @@ export default class Game {
   startAPiece() {
     this.fallingPiece = this.nextPiece
     this.nextPiece = new Models.Piece( Models.Shape.selectRandom() )
-  }
-
-  addMeteor() {
-    this.meteor = new Models.Piece( Models.Shape.shapes[ Object.keys(Models.Shape.shapes)[0] ] )
   }
 
   rotate() {
@@ -165,26 +128,6 @@ export default class Game {
 
   fallingPieceOverlapsRubble() {
     return this.fallingPiece.points().some( point =>
-      this.rubble.some( rubble => rubble.sameAs(point) ) )
-  }
-
-  meteorIsInAValidPosition() {
-    return !( this.meteorIsOutOfBounds() || this.meteorOverlapsRubble() )
-  }
-
-  transactionDoMeteor(thing, compensation) {
-    thing()
-    if (this.meteorIsOutOfBounds() || this.meteorOverlapsRubble() ) {
-      compensation()
-    }
-  }
-
-  meteorIsOutOfBounds() {
-    return this.meteor.maxRow() > this.rows
-  }
-
-  meteorOverlapsRubble() {
-    return this.meteor.points().some( point =>
       this.rubble.some( rubble => rubble.sameAs(point) ) )
   }
 

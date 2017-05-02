@@ -3,41 +3,23 @@ import * as React from 'react'
 export class GameView extends React.Component {
 
   checkGameStatus() {
-    return ( this.props.game1.isGameOver() || this.props.game2.isGameOver() )
+    return ( this.props.game.isGameOver() )
   }
 
   render() {
-    const playerOneMeteor = this.props.game1.meteor ?
-      <Meteor piece={this.props.game1.meteor} classString="square meteor"/> :
-      <div></div>
-
-    const playerTwoMeteor = this.props.game2.meteor ?
-      <Meteor piece={this.props.game2.meteor} classString="square meteor" /> :
-      <div></div>
-
     return (
       <div>
-      <NextPieceView piece={this.props.game1.nextPiece} className='next1'/>
-      <div className='border game-1' style={{ width: this.props.width,
+      <NextPieceView piece={this.props.game.nextPiece} className='next'/>
+      <div className='border game' style={{ width: this.props.width,
         height: this.props.height}}>
           <span>
-            <MessageView game={this.props.game1}/>
-            <PieceView piece={this.props.game1.fallingPiece} />
-            <RubbleView rubble={this.props.game1.rubble} />
-            <ScoreView score={this.props.game1.score} />
+            <MessageView game={this.props.game}/>
+            <PieceView piece={this.props.game.fallingPiece} />
+            <RubbleView rubble={this.props.game.rubble} />
+            <ScoreView score={this.props.game.score} />
           </span>
       </div>
-      <NextPieceView piece={this.props.game2.nextPiece} className='next2'/>
-      <div className='border game-2' style={{ width: this.props.width,
-        height: this.props.height}}>
-          <span>
-            <MessageView game= {this.props.game2} />
-            <PieceView piece={this.props.game2.fallingPiece} />
-            <RubbleView rubble={this.props.game2.rubble} />
-            <ScoreView score={this.props.game2.score} />
-          </span>
-      </div>
-      <iframe className='iframe' width="0px" height="0px" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/120364266&amp;auto_play=true&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false"></iframe>
+      {/* <iframe className='iframe' width="0px" height="0px" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/120364266&amp;auto_play=true&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false"></iframe> */}
     </div>
     )
   }
@@ -106,23 +88,6 @@ export class RubbleView extends React.Component {
             col={square.col}
             classString='square rubble' /> )}
       </span>
-    )
-  }
-}
-
-export class Meteor extends React.Component {
-  render() {
-    return (
-      <div>
-          { this.props.piece.points().map( (square, key) =>
-            <Square
-              key={key}
-              row={square.row}
-              col={square.col}
-              classString={this.props.classString}
-            /> )}
-      </div>
-
     )
   }
 }
