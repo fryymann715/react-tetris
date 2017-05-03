@@ -47,10 +47,15 @@ const gameStream = ( state = { 'game': new Game() }, action ) => {
       return isGameInactive( state ) ?
       state :
       state = { 'game': state.game.down() }
-    // case types.PAUSE:
-    //   isPaused = ( isPaused === false ) ? true : false
-    //   dispatchTick()
-    //   return state
+  /*
+    FIXME: This currently dispatches an extra TICK, causing the game to
+           run at a faster pace.
+
+    case types.PAUSE:
+      isPaused = ( isPaused === false ) ? true : false
+      dispatchTick()
+      return state
+  */
     default:
       return state
   }

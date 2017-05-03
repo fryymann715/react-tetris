@@ -11,7 +11,6 @@ export default class Game {
   }
 
   tick() {
-
     this.transactionDo(
       ()=> this.fallingPiece.fallOne(),
       ()=> this.fallingPiece.liftOne() )

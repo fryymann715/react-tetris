@@ -19,15 +19,12 @@ export class GameView extends React.Component {
             <ScoreView score={this.props.game.score} />
           </span>
       </div>
-      {/* <iframe className='iframe' width="0px" height="0px" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/120364266&amp;auto_play=true&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false"></iframe> */}
     </div>
     )
   }
-
 }
 
 export class MessageView extends React.Component {
-
   render() {
     if ( this.props.game.isGameOver() ) {
       return <h2 className="game-over">GAME OVER</h2>

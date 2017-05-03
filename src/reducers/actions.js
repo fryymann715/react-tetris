@@ -1,6 +1,0 @@
-export const TICK = 'TICK'
-export const ROTATE = 'ROTATE'
-export const LEFT = 'LEFT'
-export const RIGHT = 'RIGHT'
-export const DOWN = 'DOWN'
-export const PAUSE = 'PAUSE'
