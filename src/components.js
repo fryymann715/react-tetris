@@ -9,6 +9,7 @@ export class GameView extends React.Component {
   render() {
     return (
       <div>
+        {/* this.props.isGameStarted ? null : <StartButton startGame={this.props.startGame} /> */}
       <NextPieceView piece={this.props.game.nextPiece} className='next'/>
       <div className='border game' style={{ width: this.props.width,
         height: this.props.height}}>
@@ -19,12 +20,24 @@ export class GameView extends React.Component {
             <ScoreView score={this.props.game.score} />
           </span>
       </div>
-      {/* <iframe className='iframe' width="0px" height="0px" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/120364266&amp;auto_play=true&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false"></iframe> */}
     </div>
     )
   }
 
 }
+
+const StartScreen = props => {
+  return (
+    <div className="tetris-start-screen">
+      <div>
+      
+        <button onClick={props.startGame} value="Start Game" />
+      </div>
+    </div>
+  )
+}
+
+export {StartScreen}
 
 export class MessageView extends React.Component {
 
@@ -36,7 +49,7 @@ export class MessageView extends React.Component {
   }
 }
 
-interface ScoreViewProps { score:number }
+// interface ScoreViewProps { score:number }
 export class ScoreView extends React.Component {
   render() {
     return <div className="score-display">

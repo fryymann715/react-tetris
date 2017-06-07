@@ -7,20 +7,23 @@ export default class Game {
     this.cols = 10
     this.rubble = []
     this.score = 0
+    this.paused = false
     this.initPiece()
   }
 
   tick() {
-
+    if ( this.paused ) {
+      return this
+    }
     this.transactionDo(
       ()=> this.fallingPiece.fallOne(),
       ()=> this.fallingPiece.liftOne() )
     if ( this.fallingPiece.maxRow() === this.rows ) {
-      setTimeout( () => this.convertToRubble(), 200 )
+      setTimeout( () => this.convertToRubble(), 100 )
       return this
     }
     if ( this.nextPositionIsRubble() ) {
-      setTimeout( () => this.checkIfRubble(), 200 )
+      setTimeout( () => this.checkIfRubble(), 100 )
     }
     return this
   }
@@ -44,7 +47,9 @@ export default class Game {
     const completedRows = this.completedRows()
     completedRows.forEach( row => this.collapseRow( row ) )
     this.score += this.calculateAward(completedRows)
-    if ( !this.isGameOver() ) {
+    if ( this.isGameOver() ) {
+        this.paused = true
+      } else {
         this.startAPiece()
       }
   }
@@ -134,10 +139,10 @@ export default class Game {
   calculateAward(completedRows) {
     const scoreMap = {
       0: 0,
-      1: 40,
-      2: 100,
-      3: 300,
-      4: 1200
+      1: 20,
+      2: 50,
+      3: 200,
+      4: 800
     }
     return scoreMap[completedRows.length]
   }

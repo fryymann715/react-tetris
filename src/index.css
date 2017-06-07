@@ -1,16 +1,65 @@
 
+html {
+  box-sizing: border-box;
+  
+}
+
+body {
+  background: #0d0d0d;
+  background: radial-gradient(ellipse,#f8f8f8 25%, #bada55 45%, #0d0d0d 95%);
+  background: -o-radial-gradient(ellipse,#f8f8f8 25%, #bada55 45%, #0d0d0d 95%);
+  background: -webkit-radial-gradient(bottom,#f8f8f8 25%, #bada55 45%, #0d0d0d 95%);
+  background: -moz-radial-gradient(bottom,#f8f8f8 25%, #bada55 45%, #0d0d0d 95%);
+}
+
 .page {
   z-index: 1;
-  width: 100vw;
-  height: 100vh;
-  background-color: #212F4B;
-  margin: 0;
-  padding: 0;
+  width: 97vw;
+  height: 97vh;
   font-family: sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-width: 730px;
+}
+.header-top-area {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+    -webkit-transition: all 0.4s ease-out;
+    transition: all 0.4s ease-out;
+    height: 80px;
+    background-color: rgba( 13, 13, 13, .6 );
+    color: #bada55;
+    padding: 20px;
+}
+
+.header-top-area a, .header-top-area span {
+  color: #bada55;
+  text-decoration: none;
+  font-size: 34px;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  font-weight: 900;
+  font-size: 14px;
+  margin-top: 28px;
+  margin-left: 25px;
+  margin-right: 50px;
+}
+
+.directions-pane {
+  position: fixed;
+  bottom: 15%;
+  left: 10px;
+  padding: 10px;
+  margin: 5px;
+  text-shadow: -1px -1px 5px #fdfdfd;
+  color: #f8f8f8;
 }
 
 .border {
@@ -21,6 +70,9 @@
   color: red;
   z-index: 2;
   overflow: hidden;
+  /*bottom: 15px;*/
+  /*margin-left: auto;*/
+  /*margin-right: auto;*/
 }
 
 .iframe {
@@ -45,11 +97,11 @@
 .game-over {
   font-family: ourFont;
   font-size: 2em;
-  position: absolute;
-  margin-top: 220px;
-  margin-left: 10px;
+  position: relative;
+  top: 195px;
   text-align: center;
   z-index: 15;
+  color: #e60000;
 }
 
 .game {
@@ -100,10 +152,28 @@
 
 .next {
   position: relative;
-  top: 150px;
-  left: -220px;
-  display: flex;
-  flex-direction: row;
+  left: -4%;
   opacity: .9;
   z-index: 4;
+}
+
+#root {
+  margin-top: 200px;
+  min-height: 300px;
+}
+
+@media only screen and ( max-width: 730px ) {
+  .page {
+    display: none
+  }
+ *, body {
+   background-color: white;
+ }
+
+  body::after {
+    content: "Screen size too small.";
+    left: 30%;
+    color: white;
+
+  }
 }
